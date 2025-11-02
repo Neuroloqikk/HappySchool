@@ -31,6 +31,7 @@ body {
 
 .main-content-body{
   flex: 1;
+  padding: 50px;
 }
 
 header{
@@ -47,10 +48,6 @@ header{
 
 .rs-table-cell-content{
   padding-top: 7px !important;
-}
-
-.student-form-wrapper{
-  max-width: 250px;
 }
 
 .full-width{

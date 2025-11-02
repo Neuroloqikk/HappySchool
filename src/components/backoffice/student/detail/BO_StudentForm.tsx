@@ -2,13 +2,12 @@ import { Form, DatePicker, SelectPicker, Uploader, ButtonToolbar, Button } from 
 import React from "react";
 
 function StudentForm() {
-    const [errorVisible, setErrorVisible] = React.useState<boolean>(true);
+    const [errorVisible, setErrorVisible] = React.useState<boolean>(false);
     const errorMessage = errorVisible ? 'This field is required' : null;
 
     const data = ['2º B', '3º B'].map(
         item => ({ label: item, value: item })
     );
-
 
     return (
         <div className="student-form-wrapper">
