@@ -3,10 +3,6 @@ import StudentForm from "./BO_StudentForm";
 
 type Student = {
   id: number;
-  name: string;
-  age: number;
-  class: string;
-  email: string;
 };
 
 interface Props {

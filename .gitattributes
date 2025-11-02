@@ -1,2 +1,16 @@
-# Auto detect text files and perform LF normalization
+# Handle text files
 * text=auto
+
+# Force LF endings for source code
+*.cs text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary

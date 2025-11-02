@@ -1,37 +1,20 @@
-### dotenv ###
-.env
+# Node.js / React
+HappySchoolFrontend/node_modules/
+HappySchoolFrontend/build/
+HappySchoolFrontend/dist/
+HappySchoolFrontend/.env
+HappySchoolFrontend/.env.local
+HappySchoolFrontend/.env.*.local
 
-### react ###
-.DS_*
-*.log
-logs
-**/*.backup.*
-**/*.back.*
+# .NET / C#
+HappySchoolBackend/bin/
+HappySchoolBackend/obj/
+HappySchoolBackend/*.user
+HappySchoolBackend/*.suo
+HappySchoolBackend/.vs/
+HappySchoolBackend/appsettings.Local.json
 
-node_modules
-bower_components
-
-*.sublime*
-
-psd
-thumb
-sketch
-
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
-
-# Local History for Visual Studio Code
-.history/
-
-# Built Visual Studio Code Extensions
-*.vsix
-
-### VisualStudioCode Patch ###
-# Ignore all local history of files
-.history
-.ionide
+# IDE files
+.vscode/
+.idea/
+*.swp
