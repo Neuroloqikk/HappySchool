@@ -1,0 +1,58 @@
+:root{
+  height: 100%;
+}
+
+#root{
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+
+.sidenav{
+  border-right: 1px solid lightblue;
+}
+
+.rs-sidenav{
+  height: 100%;
+}
+
+.main-content{
+  display: flex;
+  height: 100%;
+}
+
+.main-content-body{
+  flex: 1;
+}
+
+header{
+  display: flex;
+  height: 7vh;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.students-table{
+  width: 250px;
+}
+
+.rs-table-cell-content{
+  padding-top: 7px !important;
+}
+
+.student-form-wrapper{
+  max-width: 250px;
+}
+
+.full-width{
+  width: 100%;
+}
