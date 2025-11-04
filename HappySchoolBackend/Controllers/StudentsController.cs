@@ -29,7 +29,7 @@ public class StudentController : ControllerBase
 
     // GET: api/Student/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<StudentDto>> GetStudent(int id)
+    public async Task<ActionResult<StudentDto>> GetStudent(long id)
     {
         var student = await _context.Students
             .Include(s => s.Class)
@@ -63,7 +63,7 @@ public class StudentController : ControllerBase
 
     // PUT: api/Student/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateStudent(int id, StudentDto dto)
+    public async Task<IActionResult> UpdateStudent(long id, StudentDto dto)
     {
         if (id != dto.Id)
             return BadRequest();
@@ -96,7 +96,7 @@ public class StudentController : ControllerBase
 
     // DELETE: api/Student/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteStudent(int id)
+    public async Task<IActionResult> DeleteStudent(long id)
     {
         var student = await _context.Students.FindAsync(id);
         if (student == null)
@@ -108,7 +108,7 @@ public class StudentController : ControllerBase
         return NoContent();
     }
 
-    private bool StudentExists(int id)
+    private bool StudentExists(long id)
     {
         return _context.Students.Any(e => e.Id == id);
     }

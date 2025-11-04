@@ -2,7 +2,12 @@ import { Tabs, Placeholder, Panel } from "rsuite";
 import StudentForm from "./BO_StudentForm";
 
 type Student = {
-  id: number;
+  id: number;           // use 0 for new
+  firstName: string;
+  otherNames?: string | null;
+  birthDate: Date | string;
+  classId: number | null;
+  photo?: File | null;
 };
 
 interface Props {
@@ -11,10 +16,14 @@ interface Props {
 
 function StudentDetail({ student }: Props) {
   return (
-    <Panel header="Detalhes do Aluno" bordered className="student-details-wrapper">
+    <Panel
+      header="Detalhes do Aluno"
+      bordered
+      className="student-details-wrapper"
+    >
       <Tabs defaultActiveKey="1">
         <Tabs.Tab eventKey="1" title="Aluno">
-          <StudentForm />
+          <StudentForm student={student} />
         </Tabs.Tab>
         <Tabs.Tab eventKey="2" title="Encarregado de educação">
           <Placeholder.Paragraph />

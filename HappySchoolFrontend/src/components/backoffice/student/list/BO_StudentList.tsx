@@ -1,37 +1,51 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Table, Input, InputGroup, Button, Modal } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
 import StudentDetail from "../detail/BO_StudentDetail";
 import "rsuite/dist/rsuite.css";
+import { useQuery } from "@tanstack/react-query";
 
 const { Column, HeaderCell, Cell } = Table;
 
-// Mocked student data
-const mockStudents = [
-  { id: 1, name: "João Silva", age: 20, class: "12A" },
-  { id: 2, name: "Maria Fernandes", age: 19, class: "12B" },
-  { id: 3, name: "Pedro Santos", age: 21, class: "12A" },
-  { id: 4, name: "Ana Costa", age: 20, class: "12C" },
-  { id: 5, name: "Rui Oliveira", age: 22, class: "12B" },
-  { id: 6, name: "Carla Mendes", age: 19, class: "12C" },
-];
+type Student = {
+  id: number;           // use 0 for new
+  firstName: string;
+  otherNames?: string | null;
+  birthDate: Date | string;
+  classId: number | null;
+  photo?: File | null;
+};
 
 export default function StudentList() {
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
 
-  // Filtered list based on search
-  const filteredStudents = useMemo(() => {
-    if (!search) return mockStudents;
-    return mockStudents.filter(
-      (student) =>
-        student.name.toLowerCase().includes(search.toLowerCase()) ||
-        student.class.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [search]);
+  const { isPending, error, data } = useQuery({
+    queryKey: ["repoData"],
+    queryFn: async () => {
+      const response = await fetch("https://localhost:7021/api/Student");
+      return await response.json();
+    },
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+  });
 
-  const handleView = (student: any) => {
+  if (isPending) return <div>Loading...</div>;
+
+  if (error) return <div>'An error has occurred: {error.message}</div>;
+
+  const emptyStudent: Student = {
+    id: 0,
+    firstName: "",
+    otherNames: "",
+    birthDate: new Date(),
+    classId: null,
+    photo: null,
+  };
+
+  const handleView = (student: Student) => {
     setSelectedStudent(student);
     setModalOpen(true);
   };
@@ -43,28 +57,37 @@ export default function StudentList() {
 
   return (
     <div>
-      <h2>Lista de Estudantes</h2>
+      <h2>Lista de Alunos</h2>
 
       {/* Filter Input */}
-      <InputGroup style={{ marginBottom: 20, width: 300 }}>
-        <Input
-          placeholder="Procurar por nome ou turma"
-          value={search}
-          onChange={setSearch}
-        />
-        <InputGroup.Button>
-          <SearchIcon />
-        </InputGroup.Button>
-      </InputGroup>
+      <>
+        <InputGroup style={{ marginBottom: 20, width: 300 }}>
+          <Input
+            placeholder="Procurar por nome ou turma"
+            value={search}
+            onChange={setSearch}
+          />
+          <InputGroup.Button>
+            <SearchIcon />
+          </InputGroup.Button>
+        </InputGroup>
+        <Button size="sm" onClick={() => handleView(emptyStudent)}>
+          Criar aluno
+        </Button>
+      </>
 
       {/* RSuite Table */}
       <Table
         height={400}
-        data={filteredStudents}
+        data={data}
         bordered
         cellBordered
         hover
         autoHeight
+        locale={{
+          emptyMessage: "Nenhum aluno encontrado",
+          loading: "Carregando...",
+        }}
       >
         <Column width={70} align="center" fixed>
           <HeaderCell>ID</HeaderCell>
@@ -73,24 +96,24 @@ export default function StudentList() {
 
         <Column flexGrow={1}>
           <HeaderCell>Nome</HeaderCell>
-          <Cell dataKey="name" />
+          <Cell dataKey="firstName" />
         </Column>
 
         <Column width={100} align="center">
           <HeaderCell>Idade</HeaderCell>
-          <Cell dataKey="age" />
+          <Cell dataKey="birthDate" />
         </Column>
 
         <Column width={100} align="center">
           <HeaderCell>Turma</HeaderCell>
-          <Cell dataKey="class" />
+          <Cell dataKey="className" />
         </Column>
 
         <Column width={120} fixed="right" align="center">
           <HeaderCell>Ações</HeaderCell>
           <Cell>
             {(rowData) => (
-              <Button size="sm" onClick={() => handleView(rowData)}>
+              <Button size="sm" onClick={() => handleView(rowData as Student)}>
                 Ver
               </Button>
             )}
@@ -98,20 +121,12 @@ export default function StudentList() {
         </Column>
       </Table>
 
-    
       <Modal open={modalOpen} onClose={handleClose} size="sm">
+        <Modal.Header />
         <Modal.Body>
-          {selectedStudent && (
-            <StudentDetail student={selectedStudent} />
-          )}
+          {selectedStudent && <StudentDetail student={selectedStudent} />}
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleClose} appearance="subtle">
-            Fechar
-          </Button>
-        </Modal.Footer>
       </Modal>
-
     </div>
   );
 }
