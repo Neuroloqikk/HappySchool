@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using HappySchoolBackend.Models;
 
 namespace HappySchoolBackend.Models
 {
@@ -8,5 +9,6 @@ namespace HappySchoolBackend.Models
             : base(options) { }
 
         public DbSet<Student> Students { get; set; } = null!;
+        public DbSet<HappySchoolBackend.Models.Class> Class { get; set; } = default!;
     }
 }

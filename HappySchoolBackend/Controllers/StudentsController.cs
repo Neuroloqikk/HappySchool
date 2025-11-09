@@ -43,16 +43,22 @@ public class StudentController : ControllerBase
 
     // POST: api/Student
     [HttpPost]
-    public async Task<ActionResult<StudentDto>> CreateStudent(StudentDto dto)
+    public async Task<ActionResult<StudentDto>> CreateStudent([FromForm] StudentDto dto)
     {
         var student = new Student
         {
             FirstName = dto.FirstName,
             OtherNames = dto.OtherNames,
             BirthDate = dto.BirthDate,
-            Photo = dto.Photo,
             ClassId = dto.ClassId
         };
+
+        if (dto.PhotoUpload != null)
+        {
+            using var ms = new MemoryStream();
+            await dto.PhotoUpload.CopyToAsync(ms);
+            student.Photo = ms.ToArray(); // store as byte[] in database
+        }
 
         _context.Students.Add(student);
         await _context.SaveChangesAsync();
@@ -63,7 +69,7 @@ public class StudentController : ControllerBase
 
     // PUT: api/Student/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateStudent(long id, StudentDto dto)
+    public async Task<IActionResult> UpdateStudent(long id, [FromForm] StudentDto dto)
     {
         if (id != dto.Id)
             return BadRequest();
@@ -76,8 +82,13 @@ public class StudentController : ControllerBase
         student.FirstName = dto.FirstName;
         student.OtherNames = dto.OtherNames;
         student.BirthDate = dto.BirthDate;
-        student.Photo = dto.Photo;
         student.ClassId = dto.ClassId;
+        if (dto.PhotoUpload != null)
+        {
+            using var ms = new MemoryStream();
+            await dto.PhotoUpload.CopyToAsync(ms);
+            student.Photo = ms.ToArray(); // store as byte[] in database
+        }
 
         try
         {

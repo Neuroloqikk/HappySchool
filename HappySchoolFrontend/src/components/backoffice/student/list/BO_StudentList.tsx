@@ -11,7 +11,9 @@ type Student = {
   id: number;           // use 0 for new
   firstName: string;
   otherNames?: string | null;
-  birthDate: Date | string;
+  fullName: string;
+  birthDate: Date;
+  age: number;
   classId: number | null;
   photo?: File | null;
 };
@@ -19,9 +21,9 @@ type Student = {
 export default function StudentList() {
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [selectedStudent, setSelectedStudent] = useState<Student>();
 
-  const { isPending, error, data } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: ["repoData"],
     queryFn: async () => {
       const response = await fetch("https://localhost:7021/api/Student");
@@ -40,7 +42,9 @@ export default function StudentList() {
     id: 0,
     firstName: "",
     otherNames: "",
+    fullName: "",
     birthDate: new Date(),
+    age: 0,
     classId: null,
     photo: null,
   };
@@ -51,7 +55,7 @@ export default function StudentList() {
   };
 
   const handleClose = () => {
-    setSelectedStudent(null);
+    setSelectedStudent(undefined);
     setModalOpen(false);
   };
 
@@ -60,8 +64,8 @@ export default function StudentList() {
       <h2>Lista de Alunos</h2>
 
       {/* Filter Input */}
-      <>
-        <InputGroup style={{ marginBottom: 20, width: 300 }}>
+      <div className="student-list-filters-wrapper">
+        <InputGroup style={{ width: 300 }}>
           <Input
             placeholder="Procurar por nome ou turma"
             value={search}
@@ -74,7 +78,7 @@ export default function StudentList() {
         <Button size="sm" onClick={() => handleView(emptyStudent)}>
           Criar aluno
         </Button>
-      </>
+      </div>
 
       {/* RSuite Table */}
       <Table
@@ -89,25 +93,32 @@ export default function StudentList() {
           loading: "Carregando...",
         }}
       >
-        <Column width={70} align="center" fixed>
+        <Column width={70} align="center" fixed sortable>
           <HeaderCell>ID</HeaderCell>
           <Cell dataKey="id" />
         </Column>
 
-        <Column flexGrow={1}>
+        <Column flexGrow={1} sortable>
           <HeaderCell>Nome</HeaderCell>
-          <Cell dataKey="firstName" />
+          <Cell dataKey="fullName" />
         </Column>
 
-        <Column width={100} align="center">
-          <HeaderCell>Idade</HeaderCell>
-          <Cell dataKey="birthDate" />
-        </Column>
-
-        <Column width={100} align="center">
+        <Column width={100} align="center" sortable>
           <HeaderCell>Turma</HeaderCell>
           <Cell dataKey="className" />
         </Column>
+
+        <Column width={100} align="center" sortable>
+          <HeaderCell>Idade</HeaderCell>
+          <Cell dataKey="age" />
+        </Column>        
+
+        <Column width={150} align="center" sortable>
+          <HeaderCell>Data de Nascimento</HeaderCell>
+          <Cell dataKey="birthDate">
+            {rowData => rowData.birthDate ? new Date(rowData.birthDate).toLocaleDateString("pt-PT") : ''}
+          </Cell>
+        </Column>    
 
         <Column width={120} fixed="right" align="center">
           <HeaderCell>Ações</HeaderCell>
@@ -124,7 +135,7 @@ export default function StudentList() {
       <Modal open={modalOpen} onClose={handleClose} size="sm">
         <Modal.Header />
         <Modal.Body>
-          {selectedStudent && <StudentDetail student={selectedStudent} />}
+          {selectedStudent && <StudentDetail student={selectedStudent} refetchfn={refetch} closeModal={handleClose}/>}
         </Modal.Body>
       </Modal>
     </div>

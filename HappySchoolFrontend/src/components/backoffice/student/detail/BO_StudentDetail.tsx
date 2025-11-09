@@ -5,16 +5,18 @@ type Student = {
   id: number;           // use 0 for new
   firstName: string;
   otherNames?: string | null;
-  birthDate: Date | string;
+  birthDate: Date;
   classId: number | null;
   photo?: File | null;
 };
 
 interface Props {
   student: Student;
+  refetchfn?: () => void;
+  closeModal?: () => void;
 }
 
-function StudentDetail({ student }: Props) {
+function StudentDetail({ student, refetchfn, closeModal }: Props) {
   return (
     <Panel
       header="Detalhes do Aluno"
@@ -23,7 +25,7 @@ function StudentDetail({ student }: Props) {
     >
       <Tabs defaultActiveKey="1">
         <Tabs.Tab eventKey="1" title="Aluno">
-          <StudentForm student={student} />
+          <StudentForm student={student} refetchfn={refetchfn} closeModal={closeModal} />
         </Tabs.Tab>
         <Tabs.Tab eventKey="2" title="Encarregado de educação">
           <Placeholder.Paragraph />
