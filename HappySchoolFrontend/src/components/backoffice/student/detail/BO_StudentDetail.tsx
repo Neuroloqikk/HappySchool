@@ -1,14 +1,6 @@
 import { Tabs, Placeholder, Panel } from "rsuite";
 import StudentForm from "./BO_StudentForm";
-
-type Student = {
-  id: number;           // use 0 for new
-  firstName: string;
-  otherNames?: string | null;
-  birthDate: Date;
-  classId: number | null;
-  photo?: File | null;
-};
+import { Student } from "../../../../types";
 
 interface Props {
   student: Student;
@@ -21,7 +13,7 @@ function StudentDetail({ student, refetchfn, closeModal }: Props) {
     <Panel
       header="Detalhes do Aluno"
       bordered
-      className="student-details-wrapper"
+      className="form-details-wrapper"
     >
       <Tabs defaultActiveKey="1">
         <Tabs.Tab eventKey="1" title="Aluno">

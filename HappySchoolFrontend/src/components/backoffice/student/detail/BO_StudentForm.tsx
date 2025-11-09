@@ -11,16 +11,7 @@ import {
 } from "rsuite";
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-
-type Student = {
-  id: number; // use 0 for new
-  firstName: string;
-  otherNames?: string | null;
-  birthDate: Date;
-  classId: number | null;
-  PhotoUpload?: File | null;
-  photoBase64?: string | null; // Changed to lowercase to match backend
-};
+import { Student } from "../../../../types";
 
 type ClassItem = {
   id: number;
@@ -135,7 +126,7 @@ function StudentForm({ student, refetchfn, closeModal }: Props) {
   };
 
   return (
-    <div className="student-form-wrapper">
+    <div className="form-wrapper">
       <Form
         fluid
         formValue={formValue}

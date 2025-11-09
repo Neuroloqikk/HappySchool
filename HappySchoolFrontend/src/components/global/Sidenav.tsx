@@ -22,7 +22,7 @@ function Sidebar() {
                         </Nav.Menu>
                         <Nav.Menu placement="rightStart" eventKey="3" title="Backoffice" icon={<SettingsIcon />}>
                             <Nav.Item eventKey="3-1" as={Link} to="/backoffice/alunos">Alunos</Nav.Item>
-                            <Nav.Item eventKey="3-2">Turma</Nav.Item>
+                            <Nav.Item eventKey="3-2" as={Link} to="/backoffice/turmas">Turmas</Nav.Item>
                             <Nav.Item eventKey="3-3">Regras</Nav.Item>
                         </Nav.Menu>
                     </Nav>

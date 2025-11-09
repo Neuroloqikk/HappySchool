@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { Table, Input, InputGroup, Button, Modal } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
-import StudentDetail from "../detail/BO_StudentDetail";
+import ClassDetail from "../detail/BO_ClassDetail";
 import "rsuite/dist/rsuite.css";
 import { useQuery } from "@tanstack/react-query";
-import { Student } from "../../../../types";
+import { ClassItem } from "../../../../types";
+
 const { Column, HeaderCell, Cell } = Table;
 
-
-export default function StudentList() {
+export default function ClassList() {
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<Student>();
+  const [selectedClass, setSelectedClass] = useState<ClassItem>();
 
   const { isPending, error, data, refetch } = useQuery({
     queryKey: ["repoData"],
     queryFn: async () => {
-      const response = await fetch("https://localhost:7021/api/Student");
+      const response = await fetch("https://localhost:7021/api/Classes");
       return await response.json();
     },
     refetchOnWindowFocus: false,
@@ -28,35 +28,31 @@ export default function StudentList() {
 
   if (error) return <div>'An error has occurred: {error.message}</div>;
 
-  const emptyStudent: Student = {
+  const emptyClass: ClassItem = {
     id: 0,
-    firstName: "",
-    otherNames: "",
-    fullName: "",
-    birthDate: new Date(),
-    age: 0,
-    classId: null
+    name: "",
   };
 
-  const handleView = (student: Student) => {
-    setSelectedStudent(student);
+  const handleView = (classItem: ClassItem) => {
+    console.log(classItem);
+    setSelectedClass(classItem);
     setModalOpen(true);
   };
 
   const handleClose = () => {
-    setSelectedStudent(undefined);
+    setSelectedClass(undefined);
     setModalOpen(false);
   };
 
   return (
     <div>
-      <h2>Lista de Alunos</h2>
+      <h2>Lista de Turmas</h2>
 
       {/* Filter Input */}
       <div className="student-list-filters-wrapper">
         <InputGroup style={{ width: 300 }}>
           <Input
-            placeholder="Procurar por nome ou turma"
+            placeholder="Procurar por turma"
             value={search}
             onChange={setSearch}
           />
@@ -64,8 +60,8 @@ export default function StudentList() {
             <SearchIcon />
           </InputGroup.Button>
         </InputGroup>
-        <Button size="sm" onClick={() => handleView(emptyStudent)}>
-          Criar aluno
+        <Button size="sm" onClick={() => handleView(emptyClass)}>
+          Criar turma
         </Button>
       </div>
 
@@ -78,7 +74,7 @@ export default function StudentList() {
         hover
         autoHeight
         locale={{
-          emptyMessage: "Nenhum aluno encontrado",
+          emptyMessage: "Nenhuma turma encontrado",
           loading: "Carregando...",
         }}
       >
@@ -89,31 +85,14 @@ export default function StudentList() {
 
         <Column flexGrow={1} sortable>
           <HeaderCell>Nome</HeaderCell>
-          <Cell dataKey="fullName" />
+          <Cell dataKey="name" />
         </Column>
-
-        <Column width={100} align="center" sortable>
-          <HeaderCell>Turma</HeaderCell>
-          <Cell dataKey="className" />
-        </Column>
-
-        <Column width={100} align="center" sortable>
-          <HeaderCell>Idade</HeaderCell>
-          <Cell dataKey="age" />
-        </Column>        
-
-        <Column width={150} align="center" sortable>
-          <HeaderCell>Data de Nascimento</HeaderCell>
-          <Cell dataKey="birthDate">
-            {rowData => rowData.birthDate ? new Date(rowData.birthDate).toLocaleDateString("pt-PT") : ''}
-          </Cell>
-        </Column>    
 
         <Column width={120} fixed="right" align="center">
           <HeaderCell>Ações</HeaderCell>
           <Cell>
             {(rowData) => (
-              <Button size="sm" onClick={() => handleView(rowData as Student)}>
+              <Button size="sm" onClick={() => handleView(rowData as ClassItem)}>
                 Ver
               </Button>
             )}
@@ -124,7 +103,7 @@ export default function StudentList() {
       <Modal open={modalOpen} onClose={handleClose} size="sm">
         <Modal.Header />
         <Modal.Body>
-          {selectedStudent && <StudentDetail student={selectedStudent} refetchfn={refetch} closeModal={handleClose}/>}
+          {selectedClass && <ClassDetail classItem={selectedClass} refetchfn={refetch} closeModal={handleClose}/>}
         </Modal.Body>
       </Modal>
     </div>

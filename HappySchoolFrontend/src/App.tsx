@@ -6,6 +6,7 @@ import Attendance from "./components/attendance/Attendance";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ClassList from "./components/backoffice/class/list/BO_ClassList";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/presencas/diarias" element={<Attendance />} />
                 <Route path="/presencas/mensais" element={<Attendance />} />
                 <Route path="/backoffice/alunos" element={<StudentList />} />
+                <Route path="/backoffice/turmas" element={<ClassList />} />
               </Routes>
             </div>
           </div>
